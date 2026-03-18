@@ -1,12 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_LOKI",
-      "type": "datasource",
-      "pluginId": "loki",
-      "pluginName": "Loki"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -26,11 +18,11 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 0,
+  "id": 35,
   "links": [],
   "panels": [
     {
-      "datasource": "${DS_LOKI}",
+      "datasource": "Loki",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -57,10 +49,10 @@
       "pluginVersion": "12.3.1",
       "targets": [
         {
-          "datasource": "${DS_LOKI}",
+          "datasource": "Loki",
           "direction": "backward",
           "editorMode": "code",
-          "expr": "{vulcavo_app=\"$app\"} \n|= `` \n| json \n| TenantId=~\"$tenantId|.*\" \n| RequestPath=~\"$requestPath|.*\"\n| RequestPath != \"/api/healthz\"\n|~ `(?i)$filter`\n| line_format `[{{.level}}] {{.Message}}`",
+          "expr": "{namespace=~\"$namespace\", pod=~\"$pod\"}\n|= `` \n| json \n| TenantId=~\"$tenantId|.*\" \n| RequestPath=~\"$requestPath|.*\"\n| RequestPath != \"/api/healthz\"\n|~ `(?i)$filter`\n| line_format `[{{.level}}] {{.Message}}`",
           "queryType": "range",
           "refId": "A"
         }
@@ -80,7 +72,7 @@
           "text": "ci-things",
           "value": "ci-things"
         },
-        "datasource": "${DS_LOKI}",
+        "datasource": "Loki",
         "definition": "",
         "label": "namespace",
         "name": "namespace",
@@ -97,18 +89,18 @@
       },
       {
         "current": {
-          "text": "alertmanager",
-          "value": "alertmanager"
+          "text": "backend-679c745cfc-5klvd",
+          "value": "backend-679c745cfc-5klvd"
         },
-        "datasource": "${DS_LOKI}",
+        "datasource": "Loki",
         "definition": "",
         "includeAll": false,
-        "name": "app",
+        "name": "pod",
         "options": [],
         "query": {
-          "label": "app",
+          "label": "pod",
           "refId": "LokiVariableQueryEditor-VariableQuery",
-          "stream": "",
+          "stream": "{namespace=~\"${namespace:regex}\"}",
           "type": 1
         },
         "refresh": 1,
@@ -175,5 +167,5 @@
   "timezone": "browser",
   "title": "Logs",
   "uid": "beefirwoije2of",
-  "version": 4
+  "version": 5
 }
