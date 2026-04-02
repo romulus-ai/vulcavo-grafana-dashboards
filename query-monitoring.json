@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
-  "id": 0,
+  "id": 21,
   "links": [],
   "panels": [
     {
@@ -39,8 +39,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "barWidthFactor": 0.5,
-            "drawStyle": "bars",
-            "fillOpacity": 0,
+            "drawStyle": "line",
+            "fillOpacity": 13,
             "gradientMode": "hue",
             "hideFrom": {
               "legend": false,
@@ -74,7 +74,8 @@
                 "value": 0
               }
             ]
-          }
+          },
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -89,7 +90,7 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -107,7 +108,8 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum(\n  count_over_time(\n    {namespace=\"vulcavo-system\", pod=~\"vulcavo-system-contour-ingress-envoy.*\"}\n    |= \"vulcavo.organizer.internal.vulcavo.dev\"\n    | pattern \"[<ts>] \\\"<method> <path> <proto>\\\" <status> <flags> <bytes_in> <bytes_out> <duration_ms> <upstream_ms> \\\"<client_ip>\\\" \\\"<ua>\\\" \\\"<request_id>\\\" \\\"<host>\\\" \\\"<upstream_host>\\\"\"\n    | duration_ms >= 10000\n    [5m]\n  )\n)",
+          "expr": "max_over_time(\n  {namespace=\"vulcavo-system\", pod=~\"vulcavo-system-contour-ingress-envoy.*\"}\n  | pattern \"[<ts>] \\\"<method> <path> <proto>\\\" <status> <flags> <bytes_in> <bytes_out> <duration_ms> <upstream_ms> \\\"<client_ip>\\\" \\\"<ua>\\\" \\\"<request_id>\\\" \\\"<host>\\\" \\\"<upstream_host>\\\"\"\n  | unwrap duration_ms\n  [5m]\n) by(host)",
+          "legendFormat": "{{host}}",
           "queryType": "range",
           "refId": "A"
         }
@@ -131,11 +133,11 @@
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
-            "axisPlacement": "auto",
+            "axisPlacement": "left",
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 8,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -173,7 +175,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -188,7 +191,7 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -206,12 +209,13 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by (upstream_host) (\n  count_over_time(\n    {namespace=\"vulcavo-system\", pod=~\"vulcavo-system-contour-ingress-envoy.*\"}\n    | pattern \"[<ts>] \\\"<method> <path> <proto>\\\" <status> <flags> <bytes_in> <bytes_out> <duration_ms> <upstream_ms> \\\"<client_ip>\\\" \\\"<ua>\\\" \\\"<request_id>\\\" \\\"<host>\\\" \\\"<upstream_host>\\\"\"\n    | duration_ms >= 10000\n    [5m]\n  )\n)",
+          "expr": "max_over_time(\n  {namespace=\"vulcavo-system\", pod=~\"vulcavo-system-contour-ingress-envoy.*\"}\n  |= \"vulcavo.organizer.internal.vulcavo.dev\"\n  | pattern \"[<ts>] \\\"<method> <path> <proto>\\\" <status> <flags> <bytes_in> <bytes_out> <duration_ms> <upstream_ms> \\\"<client_ip>\\\" \\\"<ua>\\\" \\\"<request_id>\\\" \\\"<host>\\\" \\\"<upstream_host>\\\"\"\n  | unwrap duration_ms\n  [5m]\n) by (upstream_host)",
+          "legendFormat": "{{upstream_host}}",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "Queries >10s by upstream Pod",
+      "title": "Querytimes by Upstream host",
       "type": "timeseries"
     },
     {
@@ -248,7 +252,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "{namespace=\"vulcavo-system\", pod=~\"vulcavo-system-contour-ingress-envoy.*\"}\n|= \"vulcavo.organizer.internal.vulcavo.dev\"\n| pattern \"[<ts>] \\\"<method> <path> <proto>\\\" <status> <flags> <bytes_in> <bytes_out> <duration_ms> <upstream_ms> \\\"<client_ip>\\\" \\\"<ua>\\\" \\\"<request_id>\\\" \\\"<host>\\\" \\\"<upstream_host>\\\"\"\n| duration_ms >= 10000",
+          "expr": "{namespace=\"vulcavo-system\", pod=~\"vulcavo-system-contour-ingress-envoy.*\"}\n| pattern \"[<ts>] \\\"<method> <path> <proto>\\\" <status> <flags> <bytes_in> <bytes_out> <duration_ms> <upstream_ms> \\\"<client_ip>\\\" \\\"<ua>\\\" \\\"<request_id>\\\" \\\"<host>\\\" \\\"<upstream_host>\\\"\"\n| duration_ms >= 10000",
           "queryType": "range",
           "refId": "A"
         }
@@ -271,5 +275,5 @@
   "timezone": "browser",
   "title": "Query Monitoring",
   "uid": "adnsg6s",
-  "version": 6
+  "version": 1
 }
