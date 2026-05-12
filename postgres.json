@@ -25,7 +25,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 0,
+  "id": 4,
   "links": [],
   "panels": [
     {
@@ -122,15 +122,15 @@
               },
               {
                 "color": "#EAB839",
-                "value": 120
+                "value": 500000000
               },
               {
                 "color": "red",
-                "value": 180
+                "value": 1000000000
               }
             ]
           },
-          "unit": "s"
+          "unit": "decbytes"
         },
         "overrides": []
       },
@@ -166,7 +166,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "max by (host, destination, sync_state) (\n  postgresql_pg_stat_replication_replication_flush_lag_bytes{host=\"$host\"}\n)",
+          "expr": "max by (host) (\n  postgresql_pg_stat_replication_replication_flush_lag_bytes{host=\"$host\"}\n)",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -1915,5 +1915,5 @@
   "timezone": "",
   "title": "Postgresql",
   "uid": "evYt6bSZk",
-  "version": 17
+  "version": 1
 }
