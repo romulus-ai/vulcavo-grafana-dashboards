@@ -1028,7 +1028,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "service_connections_accepted{host=\"$host\"}",
+          "expr": "increase(service_connections_accepted{host=\"$host\"}[1m])",
           "groupBy": [
             {
               "params": [
